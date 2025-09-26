@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.csv_storage_path: '%kernel.project_dir%/data/transactions.csv'
 
 services:
     # default configuration for services in *this* file
@@ -15,6 +16,33 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    # Service bindings
+    App\Services\Randomizer\RandomizerInterface:
+        alias: App\Services\Randomizer\Randomizer
+
+    App\Services\Storage\TransactionStorageInterface:
+        alias: App\Services\Storage\TransactionStorageService
+
+    App\Services\Status\TransactionStatusInterface:
+        alias: App\Services\Status\TransactionStatusService
+
+    # Explicit storage service configuration
+    App\Services\Storage\TransactionStorageService:
+        arguments:
+            $statusService: '@App\Services\Status\TransactionStatusInterface'
+            $csvPath: '%app.csv_storage_path%'
+
+    # Register middleware as event subscriber
+    App\Middleware\TransactionValidationMiddleware:
+        tags: ['kernel.event_subscriber']
