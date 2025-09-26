@@ -1,5 +1,20 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+    resource: ../src/Controller/
     type: attribute
+
+options_request:
+    path: /{request}
+    controller: App\Controller\DefaultController::handleOptionsRequest
+    methods: OPTIONS
+    requirements:
+        request: '.+'
+
+transactions:
+    path: /transactions
+    controller: App\Controller\TransactionController::getAll
+    methods: GET
+transaction_create:
+    path: /transactions
+    controller: App\Controller\TransactionController::create
+    methods: POST
+
