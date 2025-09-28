@@ -28,19 +28,11 @@ For detailed technical documentation, architecture overview, and developer guida
 - **Git**: For cloning the repository
 - **Extensions**: `ext-ctype`, `ext-iconv` (usually included with PHP)
 
-## Installation
+## Installation & Setup
 
 1. **Clone the Repository**:
-   
-   HTTPS:
    ```bash
    git clone https://github.com/youruser/transaction-management-system-api.git
-   cd transaction-management-system-api
-   ```
-   
-   SSH:
-   ```bash
-   git clone git@github.com:youruser/transaction-management-system-api.git
    cd transaction-management-system-api
    ```
 
@@ -53,81 +45,55 @@ For detailed technical documentation, architecture overview, and developer guida
    ```bash
    # Copy the example environment file
    cp .env.example .env
-   
    # Edit .env file with your configuration
    # Set APP_ENV=dev for development or APP_ENV=prod for production
+   # Set CSV_STORAGE_PATH (see below)
    ```
 
-4. **Set Up Data Directory**:
+4. **Set Up Data Storage** (Required Before Running):
+   - In your `.env` file, configure the CSV storage location:
+     ```env
+     CSV_STORAGE_PATH=data/transactions.csv
+     ```
+   - The application will automatically create the directory and file if they do not exist, as long as the parent directory is writable.
+   - **Permissions**: Ensure the parent directory is writable by the application (e.g., `chmod 755 data/`).
+
+5. **(Optional) Seed Dummy Data**
+   - After the file is created (e.g., after the first API call), you can optionally seed the CSV file with example transactions:
+     ```bash
+     php bin/seed_transactions.php
+     ```
+
+6. **Run the Application**
+
+   **Development Server (Recommended):**
    ```bash
-   # Ensure data directory has proper permissions
-   chmod 755 data/
-   chmod 644 data/transactions.csv
+   symfony serve
+   # or
+   php -S localhost:8000 -t public/
+   ```
+   The API will be available at `http://localhost:8000/transactions` for both GET and POST requests.
+
+   **Note:** There is no route at `/` (root). All API operations are under `/transactions`.
+
+7. **Testing**
+   ```bash
+   composer test
+   # or
+   ./vendor/bin/phpunit
    ```
 
-## Running the Application
+## Data Storage Details
 
-### Development Server (Recommended for Development)
+- **CSV_STORAGE_PATH**: Set this in your `.env` file to specify where transaction data is stored (relative to project root).
+- The application will create the directory and file if missing, and set appropriate permissions.
+- If directory or file creation fails, a clear error message will be shown.
 
-Using Symfony CLI:
-```bash
-# Install Symfony CLI if not already installed
-# https://symfony.com/download
-
-# Start the development server
-symfony serve
-```
-The API will be available at `http://127.0.0.1:8000`
-
-### Alternative: PHP Built-in Server
-```bash
-# Start PHP development server
-php -S localhost:8000 -t public/
-```
-The API will be available at `http://localhost:8000`
-
-### Production Deployment
-
-For production deployment, configure your web server (Apache/Nginx) to point to the `public/` directory and ensure proper file permissions.
-
-## Data Storage
-
-### Environment Configuration Required
-
-Before the application can automatically manage its data storage, you need to configure the CSV storage path:
-
-1. **Set CSV Storage Path**: In your `.env` file, configure the storage location:
-   ```env
-   CSV_STORAGE_PATH=data/transactions.csv
-   ```
-   
-   **Note**: You can use any path relative to your project root directory. Examples:
-   ```env
-   # Alternative locations
-   CSV_STORAGE_PATH=storage/data/transactions.csv
-   CSV_STORAGE_PATH=files/transaction_data.csv
-   CSV_STORAGE_PATH=app_data/transactions.csv
-   ...
-   ```
-
-2. **Verify Configuration**: Ensure the path is relative to your project root directory and the application has write permissions to the parent directory.
-
-### Automatic Directory Creation
-
-Once the environment is properly configured, the application automatically manages its data storage setup:
-
-- **Directory Creation**: The directory specified in your `CSV_STORAGE_PATH` is created automatically when the application first runs
-- **CSV File**: The CSV file is created automatically with proper headers if it doesn't exist
-- **Permissions**: The application sets appropriate file permissions (755 for directories, 644 for files)
-- **Error Handling**: If directory creation fails due to permission issues, the application will provide clear error messages
-
-**Important**: The `CSV_STORAGE_PATH` environment variable must be set before running the application. Without this configuration, the application cannot determine where to store transaction data.
-
-## API Documentation
+## API Endpoints
 
 ### Base URL
-- Development: `http://127.0.0.1:8000`
-- Production: `https://your-domain.com`
+- Development: `http://localhost:8000/transactions`
+- Production: `https://your-domain.com/transactions`
 
 ### Endpoints
 
@@ -183,26 +149,6 @@ null
 ### CORS Support
 The API includes CORS support for cross-origin requests via OPTIONS method handling.
 
-## Testing
-
-### Run All Tests
-```bash
-# Using Composer script
-composer test
-
-# Or directly with PHPUnit
-./vendor/bin/phpunit
-```
-
-### Run Specific Test Suites
-```bash
-# Run tests with coverage
-./vendor/bin/phpunit --coverage-html coverage/
-
-# Run specific test file
-./vendor/bin/phpunit tests/Services/Transaction/TransactionServiceTest.php
-```
-
 ## Configuration
 
 ### Environment Variables
@@ -215,7 +161,7 @@ APP_ENV=dev
 APP_SECRET=your-secret-key
 
 # CSV File Path (relative to project root)
-CSV_FILE_PATH=data/transactions.csv
+CSV_STORAGE_PATH=data/transactions.csv
 ```
 
 ### Service Configuration
