@@ -63,13 +63,7 @@ For detailed technical documentation, architecture overview, and developer guida
    - The application will automatically create the directory and file if they do not exist, as long as the parent directory is writable.
    - **Permissions**: Ensure the parent directory is writable by the application (e.g., `chmod 755 data/`).
 
-5. **(Optional) Seed Dummy Data**
-   - After the file is created (e.g., after the first API call), you can optionally seed the CSV file with example transactions:
-     ```bash
-     php bin/seed_transactions.php
-     ```
-
-6. **Run the Application**
+5. **Run the Application**
 
    **Development Server (Recommended):**
    ```bash
@@ -80,6 +74,12 @@ For detailed technical documentation, architecture overview, and developer guida
    The API will be available at `http://localhost:8000/transactions` for both GET and POST requests.
 
    **Note:** There is no route at `/` (root). All API operations are under `/transactions`.
+
+6. **(Optional) Seed Dummy Data**
+    - After the file is created (e.g., after the first API call), you can optionally seed the CSV file with example transactions:
+     ```bash
+     php bin/seed_transactions.php
+     ```
 
 7. **Testing**
    ```bash
