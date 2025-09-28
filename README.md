@@ -32,8 +32,13 @@ For detailed technical documentation, architecture overview, and developer guida
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/youruser/transaction-management-system-api.git
-   cd transaction-management-system-api
+   # HTTPS (recommended for most users)
+   git clone https://github.com/naleksicc/Transaction-Management-System-API.git
+   cd Transaction-Management-System-API
+   
+   # OR SSH (if you have SSH keys configured)
+   git clone git@github.com:naleksicc/Transaction-Management-System-API.git
+   cd Transaction-Management-System-API
    ```
 
 2. **Configure Environment**:
