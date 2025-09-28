@@ -55,7 +55,7 @@ For detailed technical documentation, architecture overview, and developer guida
      ```env
      CSV_STORAGE_PATH=data/transactions.csv
      ```
-   - The application will automatically create the directory and file if they do not exist, as long as the parent directory is writable.
+   - ❗ **Execute the /transactions route** and the application will automatically create the directory and file if they do not exist, as long as the parent directory is writable.
    - **Permissions**: Ensure the parent directory is writable by the application (e.g., `chmod 755 data/`).
 
 5. **(Optional) Seed Dummy Data**
