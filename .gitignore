@@ -17,4 +17,5 @@
 ###> Transaction Management System ###
 # CSV data files - these are generated automatically
 /data/*.csv
+.env
 ###< Transaction Management System ###
