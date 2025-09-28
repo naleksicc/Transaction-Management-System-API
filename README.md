@@ -36,18 +36,18 @@ For detailed technical documentation, architecture overview, and developer guida
    cd transaction-management-system-api
    ```
 
-2. **Install Dependencies**:
-   ```bash
-   composer install
-   ```
-
-3. **Configure Environment**:
+2. **Configure Environment**:
    ```bash
    # Copy the example environment file
    cp .env.example .env
    # Edit .env file with your configuration
    # Set APP_ENV=dev for development or APP_ENV=prod for production
    # Set CSV_STORAGE_PATH (see below)
+   ```
+
+3. **Install Dependencies**:
+   ```bash
+   composer install
    ```
 
 4. **Set Up Data Storage** (Required Before Running):
